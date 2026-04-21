@@ -18,7 +18,7 @@ const Appointment = mongoose.model('Appointment', {
   issue: String,
   date: Date
 });
-
+app.use(express.static(__dirname));
 app.post('/api/book', async (req, res) => {
   try {
     const booking = new Appointment(req.body);
