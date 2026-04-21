@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechRepair | Book a Service</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #333; text-align: center; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Computer Repair Booking</h2>
+        <form id="bookingForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Your Email" required>
+            <select id="device">
+                <option value="Laptop">Laptop</option>
+                <option value="Desktop">Desktop PC</option>
+                <option value="MacBook">MacBook</option>
+                <option value="Other">Other Device</option>
+            </select>
+            <textarea id="issue" placeholder="What's the problem? (e.g. Cracked screen)" required></textarea>
+            <input type="datetime-local" id="date" required>
+            <button type="submit">Confirm Appointment</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            btn.innerText = 'Sending...';
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                device: document.getElementById('device').value,
+                issue: document.getElementById('issue').value,
+                date: document.getElementById('date').value
+            };
+
+            try {
+                // This connects to the backend you just deployed!
+                const response = await fetch('/api/book', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    alert('Success! Your repair appointment is booked.');
+                    e.target.reset();
+                }
+            } catch (err) {
+                alert('Error connecting to server.');
+            } finally {
+                btn.innerText = 'Confirm Appointment';
+            }
+        });
+    </script>
+</body>
+</html>
